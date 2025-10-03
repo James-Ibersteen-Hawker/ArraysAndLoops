@@ -1,3 +1,4 @@
+"use strict";
 const OP = {
   arr: [
     "Dornier Do X",
@@ -12,30 +13,24 @@ const OP = {
     "Lockheed Constellation",
   ],
   run() {
+    const output = document.querySelector("#output");
+    const render = (match = "") => {
+      output.textContent = "";
+      let index = 1;
+      this.arr.forEach((e) => {
+        if (e.toLowerCase().includes(match.toLowerCase()))
+          output.insertAdjacentHTML("beforeend", `<li>${index++}. ${e}</li>`);
+      });
+    };
     this.arr = this.arr.sort(
       (a, b) => a.toLowerCase().charCodeAt(0) - b.toLowerCase().charCodeAt(0)
     );
-    this.arr.forEach((e, i) => {
-      const li = document.createElement("li");
-      li.textContent = `${i + 1}. ${e}`;
-      document.querySelector("#output").append(li);
-    });
-    const typeBox = document.createElement("input");
-    typeBox.type = "text";
-    typeBox.placeholder = "Search";
-    typeBox.addEventListener("keyup", (event) => {
-      const input = event.target.value;
-      document.querySelector("output").innerHTML = "";
-      this.arr
-        .filter((e) => e.toLowerCase())
-        .forEach((e, i) => {
-          const li = document.createElement("li");
-          li.textContent = `${i + 1}. ${e}`;
-          document.querySelector("#output").append(li);
-        });
-    });
-    document.querySelector("ul").insertAdjacentElement("beforebegin", typeBox);
+    render();
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "search";
+    output.before(input);
+    input.addEventListener("keyup", (event) => render(event.target.value));
   },
 };
-
 OP.run();
